@@ -1,18 +1,21 @@
-package com.example.santiagolopezgarcia.pruebarappi;
+package com.example.santiagolopezgarcia.pruebarappi.presenters;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.content.Context;
 
 import com.example.santiagolopezgarcia.pruebarappi.services.Suscriptor;
 import com.example.santiagolopezgarcia.pruebarappi.services.repositories.RappiService;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by ronaldgallegoduque on 30/06/16.
+ */
+public class ApplicationsPresenter  {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    private Context context;
+    public ApplicationsPresenter(Context context) {
+        this.context = context;
+    }
 
+    public void init() {
         new RappiService(new Suscriptor() {
             @Override
             public void onError(Throwable e) {
@@ -28,6 +31,6 @@ public class MainActivity extends AppCompatActivity {
             public <T> void onResultado(T datos) {
                 datos.toString();
             }
-        }, this, "https://itunes.apple.com/us/rss/topfreeapplications/").solicitudCarga();
+        }, context, "https://itunes.apple.com/us/rss/topfreeapplications/").solicitudCarga();
     }
 }

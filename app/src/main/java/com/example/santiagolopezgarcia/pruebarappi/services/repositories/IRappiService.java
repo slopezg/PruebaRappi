@@ -9,6 +9,6 @@ import rx.Observable;
  * Created by santiagolopezgarcia on 29/06/16.
  */
 public interface IRappiService {
-    @POST("json")
+    @POST("limit=20/json")
     Observable<ResponseService> cargar();
 }
