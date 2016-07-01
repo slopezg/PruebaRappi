@@ -2,8 +2,11 @@ package com.example.santiagolopezgarcia.pruebarappi.presenters;
 
 import android.content.Context;
 
+import com.example.santiagolopezgarcia.pruebarappi.model.Application;
+import com.example.santiagolopezgarcia.pruebarappi.model.Feed;
 import com.example.santiagolopezgarcia.pruebarappi.services.Suscriptor;
 import com.example.santiagolopezgarcia.pruebarappi.services.repositories.RappiService;
+import com.example.santiagolopezgarcia.pruebarappi.view.IApplicationsView;
 
 /**
  * Created by ronaldgallegoduque on 30/06/16.
@@ -11,8 +14,12 @@ import com.example.santiagolopezgarcia.pruebarappi.services.repositories.RappiSe
 public class ApplicationsPresenter  {
 
     private Context context;
+    private IApplicationsView iApplicationsView;
     public ApplicationsPresenter(Context context) {
         this.context = context;
+        if(context instanceof IApplicationsView){
+            iApplicationsView = (IApplicationsView) context;
+        }
     }
 
     public void init() {
@@ -29,7 +36,7 @@ public class ApplicationsPresenter  {
 
             @Override
             public <T> void onResultado(T datos) {
-                datos.toString();
+                iApplicationsView.loadApplications(((Feed) datos).getApplicationList());
             }
         }, context, "https://itunes.apple.com/us/rss/topfreeapplications/").solicitudCarga();
     }
