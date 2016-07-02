@@ -2,10 +2,12 @@ package com.example.santiagolopezgarcia.pruebarappi.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by santiagolopezgarcia on 29/06/16.
  */
-public class AttributesApplicationId {
+public class AttributesApplicationId implements Serializable {
 
     @SerializedName("im:id")
     private String id;

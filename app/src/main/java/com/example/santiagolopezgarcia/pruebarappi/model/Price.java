@@ -1,9 +1,11 @@
 package com.example.santiagolopezgarcia.pruebarappi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by santiagolopezgarcia on 29/06/16.
  */
-public class Price {
+public class Price implements Serializable {
 
     private String action;
     private DetailPrice detailPrice;

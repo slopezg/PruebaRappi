@@ -11,4 +11,6 @@ public interface IApplicationsView{
 
     void loadApplications(final List<Application> applicationList);
 
+    void openApplicationDetail(Application application);
+
 }

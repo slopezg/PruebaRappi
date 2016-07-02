@@ -1,9 +1,11 @@
 package com.example.santiagolopezgarcia.pruebarappi.model;
 
+import java.io.Serializable;
+
 /**
  * Created by santiagolopezgarcia on 29/06/16.
  */
-public class Author {
+public class Author implements Serializable {
     private Name name;
     private Uri uri;
 

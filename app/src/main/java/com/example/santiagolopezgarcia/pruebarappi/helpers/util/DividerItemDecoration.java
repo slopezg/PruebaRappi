@@ -1,4 +1,4 @@
-package com.example.santiagolopezgarcia.pruebarappi;
+package com.example.santiagolopezgarcia.pruebarappi.helpers.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,7 +1,9 @@
 package com.example.santiagolopezgarcia.pruebarappi.services.repositories;
 
-import com.example.santiagolopezgarcia.pruebarappi.services.ResponseService;
+import com.example.santiagolopezgarcia.pruebarappi.model.Feed;
+import com.example.santiagolopezgarcia.pruebarappi.model.ObjectResponse;
 
+import retrofit2.Call;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -10,5 +12,5 @@ import rx.Observable;
  */
 public interface IRappiService {
     @POST("limit=20/json")
-    Observable<ResponseService> cargar();
+    Call<ObjectResponse> load();
 }

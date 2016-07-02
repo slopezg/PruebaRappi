@@ -1,17 +1,17 @@
-package com.example.santiagolopezgarcia.pruebarappi.view.activities.adapters;
+package com.example.santiagolopezgarcia.pruebarappi.view.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.santiagolopezgarcia.pruebarappi.R;
 import com.example.santiagolopezgarcia.pruebarappi.model.Application;
+import com.example.santiagolopezgarcia.pruebarappi.view.IApplicationsView;
 
 import java.util.List;
 
@@ -20,25 +20,30 @@ import java.util.List;
  */
 public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapter.ListApplicationsAdapterViewHolder> {
 
-    private Context context;
     private List<Application> applicationsList;
+    private Context context;
     private boolean viewGrid;
+    private IApplicationsView iApplicationsView;
 
-    public ApplicationsAdapter(Context context, List<Application> applicationsList, boolean viewGrid) {
+    public ApplicationsAdapter(List<Application> applicationList, Context context, boolean viewGrid) {
+        this.applicationsList = applicationList;
         this.context = context;
         this.viewGrid = viewGrid;
-        this.applicationsList = applicationsList;
+        if(context instanceof IApplicationsView){
+            iApplicationsView = (IApplicationsView) context;
+        }
     }
 
     @Override
     public ListApplicationsAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView;
+        if (viewGrid) {
             rowView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_application_grid, parent, false);
-         /*else {
+        } else {
             rowView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_elemento_horizontal, parent, false);
-        }*/
+                    .inflate(R.layout.item_application_list, parent, false);
+        }
         return new ListApplicationsAdapterViewHolder(rowView);
     }
 
@@ -54,7 +59,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         return (null != applicationsList ? applicationsList.size() : 0);
     }
 
-    public class ListApplicationsAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class ListApplicationsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tvApp;
         private ImageView ivApp;
         private Application application;
@@ -63,6 +68,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
             super(itemView);
             tvApp = (TextView) itemView.findViewById(R.id.tvApp);
             ivApp = (ImageView) itemView.findViewById(R.id.ivApp);
+            itemView.setOnClickListener(this);
         }
 
         public void setDataApplication(Application application) {
@@ -70,14 +76,19 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
             tvApp.setText(application.getName().getName());
             Glide
                     .with(context)
-                    .load(application.getListImages().get(1))
+                    .load(application.getListImages().get(2).getUrl())
                     .centerCrop()
                     .crossFade()
                     .into(ivApp);
 
+
         }
 
 
+        @Override
+        public void onClick(View view) {
+            iApplicationsView.openApplicationDetail(application);
+        }
     }
 
 }
