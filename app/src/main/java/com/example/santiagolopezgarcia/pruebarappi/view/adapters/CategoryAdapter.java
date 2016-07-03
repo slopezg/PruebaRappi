@@ -18,21 +18,18 @@ import java.util.List;
 /**
  * Created by ronaldgallegoduque on 2/07/16.
  */
-public class CategoryAdapter extends ArrayAdapter<Category> {
+public class CategoryAdapter extends ArrayAdapter<String> {
 
     private Context context;
-    private Category categoryInit;
 
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public CategoryAdapter(Context context, List<String> categoryList) {
         super(context, 0, categoryList);
         this.context = context;
         adicionarValorPorDefecto(categoryList);
     }
 
-    private void adicionarValorPorDefecto(List<Category> categoryList) {
-        categoryInit = new Category();
-        categoryInit.getCategoryPropieties().setDescripitionCategory("Select Category");
-        categoryList.add(0, categoryInit);
+    private void adicionarValorPorDefecto(List<String> categoryList) {
+        categoryList.add(0, "SelectCategory");
     }
 
     @Override
@@ -44,7 +41,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     @NonNull
     private View getViewItem(int position, View convertView, ViewGroup parent) {
         CategoryViewHolder categoryViewHolder;
-        final Category category = getItem(position);
+        final String category = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_spinner, parent, false);
             categoryViewHolder = new CategoryViewHolder();
@@ -53,7 +50,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         } else {
             categoryViewHolder = (CategoryViewHolder) convertView.getTag();
         }
-        categoryViewHolder.tvName.setText(category.getCategoryPropieties().getNameCategory());
+        categoryViewHolder.tvName.setText(category);
         if (position == 0) {
             categoryViewHolder.tvName.setText("Category");
             categoryViewHolder.tvName.setTextColor(context.getResources().getColor(R.color.letter_spinner));

@@ -5,12 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by santiagolopezgarcia on 29/06/16.
  */
-public class Feed implements Serializable{
+public class Feed implements Serializable {
     @SerializedName("author")
     private Author author;
     @SerializedName("entry")
@@ -27,7 +30,7 @@ public class Feed implements Serializable{
     private List<Link> linkList;
     @SerializedName("id")
     private Uri uri;
-    private List<Category> categoryList;
+    private HashSet<String> categoryList;
 
     public Author getAuthor() {
         return author;
@@ -93,21 +96,23 @@ public class Feed implements Serializable{
         this.uri = uri;
     }
 
-    public List<Category> getCategoryList() {
+    public HashSet<String> getCategoryList() {
         return categoryList;
     }
 
-    public void setCategoryList(List<Category> categoryList) {
+    public void setCategoryList(HashSet<String> categoryList) {
         this.categoryList = categoryList;
     }
 
     public void generateCategories() {
-        categoryList = new ArrayList<>();
-        for (Application application: applicationList){
-            for(Category category: categoryList)
-            if(!category.getCategoryPropieties().getIdCategory().equals(application.getCategory())){
-                categoryList.add(application.getCategory());
-            }
+        List<Category> categoryLisComplete = new ArrayList<>();
+        List<String> categoriesName = new ArrayList<>();
+        categoryList = new HashSet<>();
+        for (Application application : applicationList) {
+            categoryLisComplete.add(application.getCategory());
+            categoriesName.add(application.getCategory().getCategoryPropieties().getNameCategory());
         }
+        categoryList  = new HashSet<>(categoriesName);
     }
+
 }

@@ -13,4 +13,5 @@ public interface IApplicationsView{
 
     void openApplicationDetail(Application application);
 
+    void changeData(String nameCategory);
 }

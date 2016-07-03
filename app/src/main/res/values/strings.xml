@@ -6,5 +6,10 @@
     <string name="title_summary">Summary</string>
     <string name="title_artist">Artist</string>
     <string name="title_rights">Rights</string>
+    <string name="title_activity">Rappi Apps</string>
+    <string name="not_internet">No hay conexión a Internet</string>
+    <string name="accept">Aceptar</string>
+    <string name="load_data">Cargando datos...</string>
+    <string name="data">Datos</string>
     <bool name="isTablet">false</bool>
 </resources>

@@ -1,7 +1,13 @@
 package com.example.santiagolopezgarcia.pruebarappi.presenters;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 
+import com.example.santiagolopezgarcia.pruebarappi.R;
 import com.example.santiagolopezgarcia.pruebarappi.helpers.util.NetworkHelper;
 import com.example.santiagolopezgarcia.pruebarappi.model.Application;
 import com.example.santiagolopezgarcia.pruebarappi.model.Category;
@@ -14,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,20 +32,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by ronaldgallegoduque on 30/06/16.
  */
-public class ApplicationsPresenter  {
+public class ApplicationsPresenter {
 
     private Context context;
     private IApplicationsView iApplicationsView;
     private DataPreferences dataPreferences;
     private NetworkHelper networkHelper;
     private Feed feed;
-    private List<Category> categoryList;
+    private HashSet<String> categoryList;
+    private ProgressDialog progressDialog;
 
     public ApplicationsPresenter(Context context) {
         this.context = context;
         dataPreferences = new DataPreferences(context);
         networkHelper = new NetworkHelper(context);
-        if(context instanceof IApplicationsView){
+        if (context instanceof IApplicationsView) {
             iApplicationsView = (IApplicationsView) context;
         }
     }
@@ -51,23 +59,61 @@ public class ApplicationsPresenter  {
         this.feed = feed;
     }
 
-    public List<Category> getCategoryList() {
+    public HashSet<String> getCategoryList() {
         return categoryList;
     }
 
-    public void setCategoryList(List<Category> categoryList) {
+    public void setCategoryList(HashSet<String> categoryList) {
         this.categoryList = categoryList;
     }
 
-    public void init() {
-        if(isOnline()) {
-            loadFeedService();
-        }else {
-            feed = getPreferences();
-            feed.generateCategories();
-            categoryList = feed.getCategoryList();
-            iApplicationsView.loadApplications(loadApplicationsXCategory("6010"));
+    private void startDialog() {
+
+        progressDialog = ProgressDialog.show(context, context.getString(R.string.data), context.getString(R.string.load_data));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadFeedService();
+                handler.sendEmptyMessage(0);
+            }
+        }).start();
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            progressDialog.dismiss();
         }
+    };
+
+    public void init() {
+        if (isOnline()) {
+            startDialog();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(R.string.not_internet)
+                    .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            feed = getPreferences();
+                            viewData();
+                            dialog.dismiss();
+                        }
+                    });
+            builder.create();
+            builder.show();
+        }
+    }
+
+    private void viewData() {
+        feed.generateCategories();
+        categoryList = feed.getCategoryList();
+        List<String> categories = new ArrayList<String>(categoryList);
+        if (categories.size() > 0)
+            iApplicationsView.loadApplications(loadApplicationsXCategory(categories.get(0)));
+        else
+            iApplicationsView.loadApplications(feed.getApplicationList());
     }
 
     private void loadFeedService() {
@@ -88,9 +134,7 @@ public class ApplicationsPresenter  {
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 savePreferences(response.body().getFeed());
                 feed = response.body().getFeed();
-                feed.generateCategories();
-                categoryList = feed.getCategoryList();
-                iApplicationsView.loadApplications(loadApplicationsXCategory("6010"));
+                viewData();
             }
 
             @Override
@@ -100,11 +144,11 @@ public class ApplicationsPresenter  {
         });
     }
 
-    private List<Application> loadApplicationsXCategory(String idCategory){
+    public List<Application> loadApplicationsXCategory(String nameCategory) {
         List<Application> applicationList = new ArrayList<>();
-        for (Application application: feed.getApplicationList()){
-            if(application.getCategory().getCategoryPropieties().getIdCategory()
-                    .equals(idCategory)){
+        for (Application application : feed.getApplicationList()) {
+            if (application.getCategory().getCategoryPropieties().getNameCategory()
+                    .equals(nameCategory)) {
                 applicationList.add(application);
             }
         }
@@ -120,7 +164,7 @@ public class ApplicationsPresenter  {
         return dataPreferences.readDataPreferences("feed.dat");
     }
 
-    public boolean isOnline(){
+    public boolean isOnline() {
         return networkHelper.isOnline();
     }
 }

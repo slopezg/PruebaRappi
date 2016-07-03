@@ -78,6 +78,11 @@ public class ApplicationsGridActivity extends AppCompatActivity implements IAppl
     }
 
     @Override
+    public void changeData(String nameCategory) {
+        loadApplications(applicationsPresenter.loadApplicationsXCategory(nameCategory));
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_applications, menu);
         selectCategory = menu.findItem(R.id.action_categories);

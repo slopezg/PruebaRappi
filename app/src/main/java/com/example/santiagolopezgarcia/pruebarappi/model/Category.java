@@ -23,4 +23,5 @@ public class Category implements Serializable {
     public void setCategoryPropieties(CategoryPropieties categoryPropieties) {
         this.categoryPropieties = categoryPropieties;
     }
+
 }
