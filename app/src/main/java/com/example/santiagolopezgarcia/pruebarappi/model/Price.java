@@ -1,5 +1,7 @@
 package com.example.santiagolopezgarcia.pruebarappi.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,9 @@ import java.io.Serializable;
  */
 public class Price implements Serializable {
 
+    @SerializedName("label")
     private String action;
+    @SerializedName("attributes")
     private DetailPrice detailPrice;
 
     public String getAction() {

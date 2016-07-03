@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">PruebaRappi</string>
+    <string name="title_price">Price</string>
+    <string name="title_name">Name</string>
+    <string name="title_category">Category</string>
+    <string name="title_summary">Summary</string>
+    <string name="title_artist">Artist</string>
+    <string name="title_rights">Rights</string>
     <bool name="isTablet">false</bool>
 </resources>

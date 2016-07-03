@@ -12,6 +12,10 @@ public class Category implements Serializable {
     @SerializedName("attributes")
     private CategoryPropieties categoryPropieties;
 
+    public Category() {
+        categoryPropieties = new CategoryPropieties();
+    }
+
     public CategoryPropieties getCategoryPropieties() {
         return categoryPropieties;
     }

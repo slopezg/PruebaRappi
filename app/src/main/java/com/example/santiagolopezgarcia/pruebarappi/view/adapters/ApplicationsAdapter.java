@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,7 +69,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
             super(itemView);
             tvApp = (TextView) itemView.findViewById(R.id.tvApp);
             ivApp = (ImageView) itemView.findViewById(R.id.ivApp);
-            itemView.setOnClickListener(this);
+            ivApp.setOnClickListener(this);
         }
 
         public void setDataApplication(Application application) {
@@ -87,6 +88,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
         @Override
         public void onClick(View view) {
+            view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
             iApplicationsView.openApplicationDetail(application);
         }
     }

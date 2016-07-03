@@ -4,6 +4,7 @@ package com.example.santiagolopezgarcia.pruebarappi.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class Feed implements Serializable{
     private List<Link> linkList;
     @SerializedName("id")
     private Uri uri;
+    private List<Category> categoryList;
 
     public Author getAuthor() {
         return author;
@@ -89,5 +91,23 @@ public class Feed implements Serializable{
 
     public void setUri(Uri uri) {
         this.uri = uri;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public void generateCategories() {
+        categoryList = new ArrayList<>();
+        for (Application application: applicationList){
+            for(Category category: categoryList)
+            if(!category.getCategoryPropieties().getIdCategory().equals(application.getCategory())){
+                categoryList.add(application.getCategory());
+            }
+        }
     }
 }

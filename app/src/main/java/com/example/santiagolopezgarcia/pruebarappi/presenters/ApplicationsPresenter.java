@@ -3,6 +3,8 @@ package com.example.santiagolopezgarcia.pruebarappi.presenters;
 import android.content.Context;
 
 import com.example.santiagolopezgarcia.pruebarappi.helpers.util.NetworkHelper;
+import com.example.santiagolopezgarcia.pruebarappi.model.Application;
+import com.example.santiagolopezgarcia.pruebarappi.model.Category;
 import com.example.santiagolopezgarcia.pruebarappi.model.Feed;
 import com.example.santiagolopezgarcia.pruebarappi.model.ObjectResponse;
 import com.example.santiagolopezgarcia.pruebarappi.helpers.preferences.DataPreferences;
@@ -10,6 +12,9 @@ import com.example.santiagolopezgarcia.pruebarappi.services.repositories.IRappiS
 import com.example.santiagolopezgarcia.pruebarappi.view.IApplicationsView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +31,8 @@ public class ApplicationsPresenter  {
     private IApplicationsView iApplicationsView;
     private DataPreferences dataPreferences;
     private NetworkHelper networkHelper;
+    private Feed feed;
+    private List<Category> categoryList;
 
     public ApplicationsPresenter(Context context) {
         this.context = context;
@@ -36,12 +43,30 @@ public class ApplicationsPresenter  {
         }
     }
 
+    public Feed getFeed() {
+        return feed;
+    }
+
+    public void setFeed(Feed feed) {
+        this.feed = feed;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
 
     public void init() {
         if(isOnline()) {
             loadFeedService();
         }else {
-            iApplicationsView.loadApplications(getPreferences().getApplicationList());
+            feed = getPreferences();
+            feed.generateCategories();
+            categoryList = feed.getCategoryList();
+            iApplicationsView.loadApplications(loadApplicationsXCategory("6010"));
         }
     }
 
@@ -62,7 +87,10 @@ public class ApplicationsPresenter  {
             @Override
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 savePreferences(response.body().getFeed());
-                iApplicationsView.loadApplications(response.body().getFeed().getApplicationList());
+                feed = response.body().getFeed();
+                feed.generateCategories();
+                categoryList = feed.getCategoryList();
+                iApplicationsView.loadApplications(loadApplicationsXCategory("6010"));
             }
 
             @Override
@@ -71,6 +99,18 @@ public class ApplicationsPresenter  {
             }
         });
     }
+
+    private List<Application> loadApplicationsXCategory(String idCategory){
+        List<Application> applicationList = new ArrayList<>();
+        for (Application application: feed.getApplicationList()){
+            if(application.getCategory().getCategoryPropieties().getIdCategory()
+                    .equals(idCategory)){
+                applicationList.add(application);
+            }
+        }
+        return applicationList;
+    }
+
 
     private void savePreferences(Feed feed) {
         dataPreferences.saveFeedPreferences(feed, "feed.dat");

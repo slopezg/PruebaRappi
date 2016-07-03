@@ -7,14 +7,19 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.santiagolopezgarcia.pruebarappi.helpers.util.DividerItemDecoration;
 import com.example.santiagolopezgarcia.pruebarappi.R;
 import com.example.santiagolopezgarcia.pruebarappi.model.Application;
+import com.example.santiagolopezgarcia.pruebarappi.model.Category;
+import com.example.santiagolopezgarcia.pruebarappi.model.Feed;
 import com.example.santiagolopezgarcia.pruebarappi.presenters.ApplicationsPresenter;
 import com.example.santiagolopezgarcia.pruebarappi.view.IApplicationsView;
 import com.example.santiagolopezgarcia.pruebarappi.view.adapters.ApplicationsAdapter;
 import com.example.santiagolopezgarcia.pruebarappi.view.popup.ApplicationDetailPopUp;
+import com.example.santiagolopezgarcia.pruebarappi.view.popup.SelectCategoryPopUp;
 
 import java.util.List;
 
@@ -26,6 +31,7 @@ public class ApplicationsGridActivity extends AppCompatActivity implements IAppl
     RecyclerView rvApplications;
     private ApplicationsPresenter applicationsPresenter;
     private boolean viewGrid;
+    private MenuItem selectCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,5 +75,28 @@ public class ApplicationsGridActivity extends AppCompatActivity implements IAppl
         FragmentManager fragmentManager = getSupportFragmentManager();
         applicationDetailPopUp.setArguments(args);
         applicationDetailPopUp.show(fragmentManager, "");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_applications, menu);
+        selectCategory = menu.findItem(R.id.action_categories);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_categories:
+                SelectCategoryPopUp selectCategoryPopUp = new SelectCategoryPopUp();
+                Bundle args = new Bundle();
+                args.putSerializable(Feed.class.getName(), applicationsPresenter.getFeed());
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                selectCategoryPopUp.setArguments(args);
+                selectCategoryPopUp.show(fragmentManager, "");
+                break;
+        }
+        return true;
     }
 }
