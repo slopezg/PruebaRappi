@@ -73,6 +73,8 @@ public class ApplicationDetailPopUp extends DialogFragment {
                 .with(getContext())
                 .load(application.getListImages().get(2).getUrl())
                 .centerCrop()
+                .placeholder(R.mipmap.ic_loading)
+                .error(R.mipmap.ic_error)
                 .crossFade()
                 .into(ivApp);
 

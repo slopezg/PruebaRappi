@@ -30,7 +30,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         this.applicationsList = applicationList;
         this.context = context;
         this.viewGrid = viewGrid;
-        if(context instanceof IApplicationsView){
+        if (context instanceof IApplicationsView) {
             iApplicationsView = (IApplicationsView) context;
         }
     }
@@ -69,7 +69,11 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
             super(itemView);
             tvApp = (TextView) itemView.findViewById(R.id.tvApp);
             ivApp = (ImageView) itemView.findViewById(R.id.ivApp);
-            ivApp.setOnClickListener(this);
+            if(!viewGrid) {
+                itemView.setOnClickListener(this);
+            }else {
+                ivApp.setOnClickListener(this);
+            }
         }
 
         public void setDataApplication(Application application) {
@@ -79,6 +83,8 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
                     .with(context)
                     .load(application.getListImages().get(2).getUrl())
                     .centerCrop()
+                    .placeholder(R.mipmap.ic_loading)
+                    .error(R.mipmap.ic_error)
                     .crossFade()
                     .into(ivApp);
 
@@ -88,7 +94,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
         @Override
         public void onClick(View view) {
-            view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
+            ivApp.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
             iApplicationsView.openApplicationDetail(application);
         }
     }
