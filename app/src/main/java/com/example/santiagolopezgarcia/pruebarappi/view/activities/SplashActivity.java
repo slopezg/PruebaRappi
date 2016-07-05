@@ -3,16 +3,19 @@ package com.example.santiagolopezgarcia.pruebarappi.view.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.example.santiagolopezgarcia.pruebarappi.R;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
  * Created by ronaldgallegoduque on 3/07/16.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends AppCompatActivity {
 
     @InjectView(R.id.lyMain)
     LinearLayout lyMain;
@@ -22,11 +25,12 @@ public class SplashActivity extends Activity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        ButterKnife.inject(this);
 
         if(getResources().getBoolean(R.bool.isTablet)){
-            lyMain.setBackground(getResources().getDrawable(R.mipmap.ic_tablet_splash));
+            lyMain.setBackgroundResource(R.drawable.ic_tablet_splash);
         }else {
-            lyMain.setBackground(getResources().getDrawable(R.mipmap.ic_smatphone_splash));
+            lyMain.setBackgroundResource(R.drawable.ic_smatphone_splash);
         }
 
         Thread timerThread = new Thread() {

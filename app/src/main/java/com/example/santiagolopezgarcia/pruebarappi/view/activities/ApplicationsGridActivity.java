@@ -23,6 +23,7 @@ import com.example.santiagolopezgarcia.pruebarappi.view.popup.SelectCategoryPopU
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ApplicationsGridActivity extends AppCompatActivity implements IApplicationsView {
@@ -37,6 +38,7 @@ public class ApplicationsGridActivity extends AppCompatActivity implements IAppl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applications_activity);
+        ButterKnife.inject(this);
         initActivity();
         if(viewGrid){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -53,7 +55,6 @@ public class ApplicationsGridActivity extends AppCompatActivity implements IAppl
 
     @Override
     public void loadApplications(final List<Application> applicationList) {
-        rvApplications = (RecyclerView) findViewById(R.id.rvApplications);
         rvApplications.setAdapter(new ApplicationsAdapter(applicationList, this, viewGrid));
         if (getResources().getBoolean(R.bool.isTablet)) {
             StaggeredGridLayoutManager gridLayoutManager =
